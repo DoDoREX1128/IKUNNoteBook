@@ -1,9 +1,9 @@
 package com.example.tetris.adapt;
 
 public class ListItem {
-    private String description;
-    private String date;
-    private String username;
+    private String description; // 项目描述
+    private String date; // 日期
+    private String username; // 用户名
 
     public ListItem(String description, String date, String username) {
         this.description = description;

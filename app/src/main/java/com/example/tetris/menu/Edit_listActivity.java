@@ -25,16 +25,16 @@ import java.util.List;
 
 public class Edit_listActivity extends AppCompatActivity {
 
-    private ImageView imageButtonImageView;
-    private TextView textView;
-    private EditText editText;
-    private String content;
-    private String currentTime;
-    private String receivedUsername;
-    private DataBase db;
-    private UsersListDao usersListDao;
-    private UsersList usersList;
-    private String time;
+    private ImageView imageButtonImageView; // 图片按钮
+    private TextView textView; // 文本视图
+    private EditText editText; // 编辑文本框
+    private String content; // 内容
+    private String currentTime; // 当前时间
+    private String receivedUsername; // 接收到的用户名
+    private DataBase db; // 数据库
+    private UsersListDao usersListDao; // 用户列表Dao
+    private UsersList usersList; // 用户列表
+    private String time; // 时间
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,15 +68,14 @@ public class Edit_listActivity extends AppCompatActivity {
                 .allowMainThreadQueries()
                 .build();
         usersListDao = db.usersListDao();
-        
+
         //EditText初始文字
         usersList=usersListDao.getDiaryByUsernameAndTime(receivedUsername,time);
         if (usersList!=null) {
-
             editText.setText(usersList.getContent());
         }
-        
 
+        // 设置图片按钮的点击事件
         imageButtonImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,8 +89,6 @@ public class Edit_listActivity extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 
     /**

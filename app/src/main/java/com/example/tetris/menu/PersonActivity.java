@@ -23,25 +23,27 @@ import com.example.tetris.others.AboutUsActivity;
 import com.example.tetris.others.VersionActivity;
 
 public class PersonActivity extends AppCompatActivity {
-    private ImageView myPhotoImageView;
-    private TextView accountTextView;
-    private TextView settingAccountTextView;
-    private TextView myListTextView;
-    private TextView modifyPasswordTextView;
-    private TextView noneTextView;
-    private Button exitButton;
-    private Button deleteButton;
-    private DataBase db;
-    private   String receivedUsername;
-    private UserDao userDao;
-    private int clickCount = 0;
-    private long startTime = 0;
+    private ImageView myPhotoImageView; // 我的照片
+    private TextView accountTextView; // 账户
+    private TextView settingAccountTextView; // 设置账户
+    private TextView myListTextView; // 我的列表
+    private TextView modifyPasswordTextView; // 修改密码
+    private TextView noneTextView; // 无
+    private Button exitButton; // 退出按钮
+    private Button deleteButton; // 注销按钮
+    private DataBase db; // 数据库
+    private String receivedUsername; // 接收到的用户名
+    private UserDao userDao; // 用户数据访问对象
+    private int clickCount = 0; // 点击次数
+    private long startTime = 0; // 开始时间
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person);
         init();
     }
+
     private void init(){
         myPhotoImageView = findViewById(R.id.myPhoto);
         accountTextView = findViewById(R.id.account);
@@ -52,20 +54,19 @@ public class PersonActivity extends AppCompatActivity {
         exitButton = findViewById(R.id.exit_button);
         deleteButton=findViewById(R.id.delete_button);
 
-        //数据库初始化
-        db = Room.databaseBuilder( getApplicationContext(), DataBase.class, "mydb" )
+        // 数据库初始化
+        db = Room.databaseBuilder(getApplicationContext(), DataBase.class, "mydb")
                 .allowMainThreadQueries()
                 .build();
         userDao= db.userDao();
 
-        receivedUsername = getIntent().getStringExtra("Username");
+        receivedUsername = getIntent().getStringExtra("Username"); // 获取传递过来的用户名
 
-        settingAccountTextView.setText(receivedUsername);
+        settingAccountTextView.setText(receivedUsername); // 设置账户名为传递过来的用户名
 
         myListTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 long currentTime = System.currentTimeMillis();
 
                 if (clickCount == 0 || (currentTime - startTime) < 3000) {
@@ -91,6 +92,7 @@ public class PersonActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         noneTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,19 +100,20 @@ public class PersonActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ToLogin();
             }
         });
+
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DeleteToLogin();
             }
         });
-
     }
 
     private void ToLogin(){
@@ -121,7 +124,6 @@ public class PersonActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // 用户点击确认退出，执行退出操作
-
                         Intent intent = new Intent(PersonActivity.this, LoginActivity.class);
                         startActivity(intent);
                         Intent broadcastIntent = new Intent("finish_activity");
@@ -146,13 +148,11 @@ public class PersonActivity extends AppCompatActivity {
                 .setPositiveButton("是", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // 用户点击确认退出，执行退出操作
-
+                        // 用户点击确认注销，执行注销操作
                         User user=userDao.findUserName(receivedUsername);
                         if (user!=null) {
                             userDao.delete(user);
                             Toast.makeText(PersonActivity.this, "注销成功", Toast.LENGTH_SHORT).show();
-
                             finish();
                         } else {
                             Toast.makeText(PersonActivity.this, "注销失败", Toast.LENGTH_SHORT).show();
@@ -178,7 +178,5 @@ public class PersonActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-
     }
 }

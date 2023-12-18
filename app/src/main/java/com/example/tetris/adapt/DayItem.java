@@ -1,10 +1,10 @@
 package com.example.tetris.adapt;
 
 public class DayItem {
-    private String title;
-    private String description;
-    private String date;
-    private String username;
+    private String title;// 日程标题
+    private String description;// 日程描述
+    private String date;// 日期
+    private String username;// 用户名
 
     public DayItem(String title, String description, String date, String username) {
         this.title = title;

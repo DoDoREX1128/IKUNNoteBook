@@ -25,6 +25,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+这段代码定义了一个自定义的适配器类`DayAdapter`，它可以用于在Android应用程序中显示一个列表的项目列表。
+`DayAdapter`类包含一个`getView()`方法，用于为每个列表项创建一个视图。
+该方法从可循环使用的视图中检索标题、描述、日期和两个按钮的视图，
+或者如果没有可循环使用的视图可用，则创建一个新视图。它还设置了两个按钮的点击监听器，
+用于编辑和删除列表项。`updateData()`方法用于更新适配器中的数据。
+*/
 public class DayAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<DayItem> itemList;

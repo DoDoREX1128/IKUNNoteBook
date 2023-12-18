@@ -32,20 +32,20 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private ImageView circularImageButton;
-    private TextView centerText;
-    private ImageView rightTopButton;
-    private CalendarView calendarView;
-    private ListView listView;
-    private ImageView nextImageView;
-    private TextView username;
-    private String date;
-    private DataBase db;
-    private UsersDayDao usersDayDao;
-    private List<UsersDay> usersDays;
-    private String receivedUsername;
-    private DayAdapter adapter;
-    private ArrayList<DayItem> itemList;
+    private ImageView circularImageButton;  // 圆形按钮
+    private TextView centerText;  // 中间文本
+    private ImageView rightTopButton;  // 右上角按钮
+    private CalendarView calendarView;  // 日历视图
+    private ListView listView;  // 列表视图
+    private ImageView nextImageView;  // 下一个图像视图
+    private TextView username;  // 用户名文本视图
+    private String date;  // 日期
+    private DataBase db;  // 数据库
+    private UsersDayDao usersDayDao;  // 用户日记数据访问对象
+    private List<UsersDay> usersDays;  // 用户日记列表
+    private String receivedUsername;  // 接收到的用户名
+    private DayAdapter adapter;  // 日记适配器
+    private ArrayList<DayItem> itemList;  // 日记项列表
 
 
     @Override

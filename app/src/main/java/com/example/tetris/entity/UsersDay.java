@@ -11,20 +11,20 @@ import java.io.Serializable;
 public class UsersDay {
     @NonNull
     @ColumnInfo(name = "username")
-    private String username;
+    private String username; // 用户名
 
     @NonNull
     @ColumnInfo(name = "createTime")
-    private String createTime;
+    private String createTime; // 创建时间
 
     @ColumnInfo(name = "title")
-    private String title;
+    private String title; // 标题
 
     @ColumnInfo(name = "content")
-    private String content;
+    private String content; // 内容
 
     @ColumnInfo(name = "image_data")
-    private String imageData;
+    private String imageData; // 图片数据
 
     public String getImageData() {
         return imageData;
@@ -67,6 +67,4 @@ public class UsersDay {
     public void setTitle(String title) {
         this.title = title;
     }
-
-
 }

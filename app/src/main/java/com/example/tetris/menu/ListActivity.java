@@ -32,18 +32,18 @@ import java.util.List;
 
 public class ListActivity extends AppCompatActivity {
 
-    private ImageView circularImageButton;
-    private TextView centerTextView;
-    private ImageView rightTopButton;
-    private ListView listView;
-    private ImageView leftCircleImageView;
-    private TextView username;
-    private DataBase db;
-    private UsersListDao usersListDao;
-    private String receivedUsername;
-    private List<UsersList> usersLists;
-    private ArrayList<ListItem> itemList;
-    private ListAdapter adapter;
+    private ImageView circularImageButton;  // 圆形按钮
+    private TextView centerTextView;  // 中心文本
+    private ImageView rightTopButton;  // 右上角按钮
+    private ListView listView;  // 列表视图
+    private ImageView leftCircleImageView;  // 左边圆形图片视图
+    private TextView username;  // 用户名文本视图
+    private DataBase db;  // 数据库
+    private UsersListDao usersListDao;  // 用户列表数据访问对象
+    private String receivedUsername;  // 接收到的用户名
+    private List<UsersList> usersLists;  // 用户列表
+    private ArrayList<ListItem> itemList;  // 列表项
+    private ListAdapter adapter;  // 列表适配器
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +51,7 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
         init();
     }
+
     private void init(){
         circularImageButton = findViewById(R.id.circular_image_button);
         centerTextView = findViewById(R.id.center_text);
@@ -77,37 +78,36 @@ public class ListActivity extends AppCompatActivity {
         if(itemList!=null) itemList.clear();
         for (UsersList usl:usersLists
              ) {
-
+            // 将用户列表中的内容、创建时间和用户名添加到列表项中
             itemList.add(new ListItem(usl.getContent(),usl.getCreateTime(),usl.getUsername()));
         }
         adapter = new ListAdapter(ListActivity.this, itemList);
         listView.setAdapter(adapter);
 
-
-
+        // 左边圆形图片视图的点击事件
         leftCircleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-            finish();
-
+                finish();
             }
         });
 
+        // 右上角按钮的点击事件
         rightTopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                // 跳转到创建列表活动，并传递用户名
                 Intent intent = new Intent(ListActivity.this, CreateListActivity.class);
                 intent.putExtra("Username", receivedUsername);
                 startActivity(intent);
             }
         });
 
+        // 圆形按钮的点击事件
         circularImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                // 跳转到个人活动，并传递用户名
                 Intent intent = new Intent(ListActivity.this, PersonActivity.class);
                 intent.putExtra("Username", receivedUsername);
                 startActivity(intent);
@@ -115,10 +115,10 @@ public class ListActivity extends AppCompatActivity {
         });
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();
-
         initListView();
     }
 
@@ -127,7 +127,7 @@ public class ListActivity extends AppCompatActivity {
         if(itemList!=null) itemList.clear();
         for (UsersList usl:usersLists
         ) {
-
+            // 将用户列表中的内容、创建时间和用户名添加到列表项中
             itemList.add(new ListItem(usl.getContent(),usl.getCreateTime(),usl.getUsername()));
         }
         adapter = new ListAdapter(ListActivity.this, itemList);

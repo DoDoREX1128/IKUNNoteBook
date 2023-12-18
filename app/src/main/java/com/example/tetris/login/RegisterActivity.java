@@ -25,26 +25,25 @@ import com.example.tetris.db.DataBase;
 import com.example.tetris.entity.User;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
-    private TextView text_title;
-    private EditText edit_register, edit_setpassword, edit_resetpassword;
-    private Button btn_yes, btn_cancel;
-    //    private DBHelper dbHelper;
-    private DataBase db;
-    private UserDao userDao;
-    private boolean flag;
+    private TextView text_title; // 标题文本视图
+    private EditText edit_register, edit_setpassword, edit_resetpassword; // 注册、设置密码、重置密码的编辑文本框
+    private Button btn_yes, btn_cancel; // 确定和取消按钮
+    private DataBase db; // 数据库
+    private UserDao userDao; // 用户数据访问对象
+    private boolean flag; // 标志位，用于判断用户名和密码是否满足要求
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        flag = false;
-        text_title = (TextView) findViewById(R.id.text_title);
+        flag = false; // 初始化标志位为false
+        text_title = (TextView) findViewById(R.id.text_title); // 获取标题文本视图
         //使用字体
 //        Typeface typeface = ResourcesCompat.getFont(this, R.font.yan);
 //        text_title.setTypeface(typeface);
 
-        edit_register = findViewById(R.id.edit_register);
+        edit_register = findViewById(R.id.edit_register); // 获取注册编辑文本框
         edit_register.setFilters(new InputFilter[]{new InputFilter() {
             @Override
             public CharSequence filter(CharSequence source, int start, int end,
@@ -92,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-        edit_setpassword = findViewById(R.id.edit_setpassword);
+        edit_setpassword = findViewById(R.id.edit_setpassword); // 获取设置密码编辑文本框
         edit_setpassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -126,7 +125,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-        edit_resetpassword = (EditText) findViewById(R.id.edit_resetpassword);
+        edit_resetpassword = (EditText) findViewById(R.id.edit_resetpassword); // 获取重置密码编辑文本框
         edit_resetpassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -140,9 +139,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-        btn_yes = (Button) findViewById(R.id.btn_yes);
+        btn_yes = (Button) findViewById(R.id.btn_yes); // 获取确定按钮
         btn_yes.setOnClickListener(this);
-        btn_cancel = (Button) findViewById(R.id.btn_cancel);
+        btn_cancel = (Button) findViewById(R.id.btn_cancel); // 获取取消按钮
         btn_cancel.setOnClickListener(this);
 
         //连接数据库
@@ -187,6 +186,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     /**
      * 注册用户
+     * @param username 用户名
+     * @param userpassword 用户密码
      */
     private void registerUserInfo(String username, String userpassword) {
         User user = new User();
@@ -197,6 +198,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     /**
      * 检验用户名是否已经注册
+     * @param value 用户名
+     * @return 用户是否已经注册
      */
     public boolean CheckIsDataAlreadyInDBorNot(String value) {
         User user = userDao.findUserName(value);

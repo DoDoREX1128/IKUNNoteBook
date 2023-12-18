@@ -19,14 +19,14 @@ import com.example.tetris.dao.UserDao;
 import com.example.tetris.db.DataBase;
 import com.example.tetris.entity.User;
 
-
+// 删除用户信息的活动页面
 public class DeleteActivity extends AppCompatActivity implements View.OnClickListener {
-    private TextView text_title;
-    private Button btn_confirm, btn_cancel;
-    private EditText edit_account, edit_password;
-//    private DBHelper dbHelper;
-    private DataBase db;
-    private UserDao userDao;
+    private TextView text_title;  // 标题文本视图
+    private Button btn_confirm, btn_cancel;  // 确认按钮和取消按钮
+    private EditText edit_account, edit_password;  // 账号和密码输入框
+    private DataBase db;  // 数据库对象
+    private UserDao userDao;  // 用户数据访问对象
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,15 +34,15 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
         init();
     }
 
+    // 初始化方法
     private void init() {
-        text_title = (TextView) findViewById(R.id.text_title);
-        //使用字体
-//        Typeface typeface = ResourcesCompat.getFont(this, R.font.zhao);
-//        text_title.setTypeface(typeface);
+        text_title = (TextView) findViewById(R.id.text_title);  // 获取标题文本视图
+        // 使用字体
+        // Typeface typeface = ResourcesCompat.getFont(this, R.font.zhao);
+        // text_title.setTypeface(typeface);
 
-        edit_account = (EditText) findViewById(R.id.edit_account);
-        //获取数据库对象,且对比Data.db中的username是否存在，存在则进行删除操作
-
+        edit_account = (EditText) findViewById(R.id.edit_account);  // 获取账号输入框
+        // 获取数据库对象,且对比Data.db中的username是否存在，存在则进行删除操作
         edit_account.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -53,9 +53,8 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        edit_password = (EditText) findViewById(R.id.edit_password);
-        //获取数据库对象,且对比Data.db中的password是否存在，存在则进行删除操作
-
+        edit_password = (EditText) findViewById(R.id.edit_password);  // 获取密码输入框
+        // 获取数据库对象,且对比Data.db中的password是否存在，存在则进行删除操作
         edit_password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -66,27 +65,27 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        btn_confirm = (Button) findViewById(R.id.btn_confirm);
+        btn_confirm = (Button) findViewById(R.id.btn_confirm);  // 获取确认按钮
         btn_confirm.setOnClickListener(this);
-        btn_cancel = (Button) findViewById(R.id.btn_cancel);
+        btn_cancel = (Button) findViewById(R.id.btn_cancel);  // 获取取消按钮
         btn_cancel.setOnClickListener(this);
-        //数据库初始化
-        db = Room.databaseBuilder( getApplicationContext(), DataBase.class, "mydb" )
+        // 数据库初始化
+        db = Room.databaseBuilder(getApplicationContext(), DataBase.class, "mydb")
                 .allowMainThreadQueries()
                 .build();
-        userDao= db.userDao();
+        userDao = db.userDao();
     }
 
     @Override
     public void onClick(View v) {
-        //获取输入的用户名和密码
+        // 获取输入的用户名和密码
         String account = edit_account.getText().toString();
         String password = edit_password.getText().toString();
         switch (v.getId()) {
             case R.id.btn_confirm:
-                //对比username和password是否存在，存在则进行删除操作id段
+                // 对比username和password是否存在，存在则进行删除操作
                 User user = userDao.findUser(account, password);
-                if (user!=null) {
+                if (user != null) {
                     userDao.delete(user);
                     Toast.makeText(this, "删除成功", Toast.LENGTH_SHORT).show();
 
@@ -94,13 +93,12 @@ public class DeleteActivity extends AppCompatActivity implements View.OnClickLis
                 } else {
                     Toast.makeText(this, "删除失败", Toast.LENGTH_SHORT).show();
                 }
-
-                    break;
-                case R.id.btn_cancel:    //清空输入框
-                    edit_account.setText("");
-                    edit_password.setText("");
-                    finish();
-                    break;
+                break;
+            case R.id.btn_cancel:  // 清空输入框
+                edit_account.setText("");
+                edit_password.setText("");
+                finish();
+                break;
         }
     }
 }

@@ -16,16 +16,15 @@ public class VersionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_version);
 
-
-        // 获取PackageManager
+        // 获取PackageManager，用于获取应用程序的信息
         PackageManager packageManager = getPackageManager();
         try {
-            // 获取应用的PackageInfo对象
+            // 获取应用的PackageInfo对象，包含应用的详细信息
             PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
 
             // 获取版本号和版本名
-            int versionCode = packageInfo.versionCode;
-            String versionName = packageInfo.versionName;
+            int versionCode = packageInfo.versionCode; // 版本号
+            String versionName = packageInfo.versionName; // 版本名
 
             // 在TextView中显示版本信息
             TextView versionTextView = findViewById(R.id.versionTextView);

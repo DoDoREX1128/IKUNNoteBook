@@ -39,24 +39,24 @@ import java.util.List;
 
 public class Edit_dayActivity extends AppCompatActivity {
 
-    private EditText titleCreateEditText;
-    private ImageView imageOk;
-    private ImageView imageImageView;
-    private ImageView photographImageView;
-    private TextView textView;
-    private EditText contentEditText;
-    private String receivedUsername;
-    private DataBase db;
-    private UsersDayDao usersDayDao;
-    private byte[] image;
-    private ArrayList<byte[]> images;
-    private byte[] graph;
-    private String title;
-    private String content;
-    private static final int REQUEST_IMAGE_PICK = 1;
-    private String currentTime;
-    private String time;
-    private UsersDay usersday;
+    private EditText titleCreateEditText;  // 标题输入框
+    private ImageView imageOk;  // 图片确认按钮
+    private ImageView imageImageView;  // 图片显示框
+    private ImageView photographImageView;  // 相机按钮
+    private TextView textView;  // 时间显示框
+    private EditText contentEditText;  // 内容输入框
+    private String receivedUsername;  // 接收到的用户名
+    private DataBase db;  // 数据库对象
+    private UsersDayDao usersDayDao;  // 用户日记数据访问对象
+    private byte[] image;  // 图片字节数组
+    private ArrayList<byte[]> images;  // 图片字节数组列表
+    private byte[] graph;  // 图片字节数组
+    private String title;  // 标题
+    private String content;  // 内容
+    private static final int REQUEST_IMAGE_PICK = 1;  // 请求选择图片的标识
+    private String currentTime;  // 当前时间
+    private String time;  // 传递过来的时间
+    private UsersDay usersday;  // 用户日记对象
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,14 +120,6 @@ public class Edit_dayActivity extends AppCompatActivity {
                 }
             }
         });
-//        imageImageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//
-//                openGallery();
-//            }
-//        });
 
         setImage();
     }
@@ -150,7 +142,6 @@ public class Edit_dayActivity extends AppCompatActivity {
             while (startIndex < inputString.length()) {
                 int foundIndex = inputString.indexOf(target, startIndex);
                 if (foundIndex != -1) {
-
                     positions.add(foundIndex + target.length() - 1);
                     startIndex = foundIndex + 1;
                 } else {
@@ -159,28 +150,21 @@ public class Edit_dayActivity extends AppCompatActivity {
             }
             StringBuilder stringBuilder = new StringBuilder(inputString);
             int change = 0;
-            for (int index : positions
-            ) {
+            for (int index : positions) {
                 if (inputString == null || index < 0 || index >= inputString.length()) {
                     // 处理无效输入，或索引超出字符串长度的情况
-
                 } else {
-                    Log.d("decode", " " + stringBuilder);
                     stringBuilder.deleteCharAt(index - change);
                     change++;
                 }
             }
             inputString = stringBuilder.toString();
-            Log.d("decode", " " + inputString);
             contentEditText.setText(inputString);
             for (int i = 0; i < positions.size(); i++) {
                 if (i>images.size()-1) break;
                 Bitmap bitmap = BitmapFactory.decodeByteArray(images.get(i), 0, images.get(i).length);
                 insertImage(bitmap, positions.get(i));
-//                Log.d("decode", "initTextAndImage: " + inputString.charAt(positions.get(i)-1));
             }
-            Log.d("decode", "initTextAndImage: " + contentEditText.getText());
-
         } else Log.d("flag", "init: 2222");
     }
 
@@ -263,8 +247,6 @@ public class Edit_dayActivity extends AppCompatActivity {
         // 创建一个可编辑的SpannableStringBuilder对象，并将图片插入其中
         SpannableStringBuilder builder = new SpannableStringBuilder();
 
-        // 压缩图片
-
         // 调整图片大小
         int desiredWidth = 200; // 设置你想要的图片宽度
         int desiredHeight = 200; // 设置你想要的图片高度
@@ -328,61 +310,6 @@ public class Edit_dayActivity extends AppCompatActivity {
         byte[] compressedData = outputStream.toByteArray();
         return BitmapFactory.decodeByteArray(compressedData, 0, compressedData.length);
     }
-//
-//    /**
-//     * 进入相册选择照片
-//     */
-//    private void openGallery() {
-//
-//        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//        startActivityForResult(galleryIntent, REQUEST_IMAGE_PICK);
-//    }
-//
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK && data != null) {
-//            Uri selectedImageUri = data.getData();
-//            // 在EditText中插入照片
-//            Log.d("flag", "onActivityResult: " + resultCode + "");
-//            insertImageIntoEditText(selectedImageUri);
-//
-//
-//        }
-//    }
-//
-//    /**
-//     * 将照片插入文本中
-//     *
-//     * @param selectedImageUri
-//     */
-//    private void insertImageIntoEditText(Uri selectedImageUri) {
-//        try {
-//            // 从Uri中获取Bitmap
-//            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
-//            Log.d("flag", "onActivityResult111111: " + bitmap.toString());
-//
-//            //将图片转成byte[]
-//            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-//            image = byteArrayOutputStream.toByteArray();
-//
-//            // 将Bitmap插入到EditText中
-//
-//            SpannableStringBuilder builder = new SpannableStringBuilder(contentEditText.getText());
-//
-//            builder.append("\n"); // 在照片前添加换行符
-//            int start = builder.length();
-////            builder.setSpan(new ImageSpan(CreateDayActivity.this, bitmap), start, start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            Log.d("flag", "onActivityResult1www11111: ");
-//            // 更新EditText的内容
-//            contentEditText.setText(builder);
-//            contentEditText.setSelection(builder.length()); // 将光标移动到文本末尾
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     /**
      * 将日记保存，并写入数据库
@@ -390,15 +317,11 @@ public class Edit_dayActivity extends AppCompatActivity {
     private boolean save() {
 
         usersday.setTitle(title);
-//        usersday.setUsername(receivedUsername);
-
         usersday.setContent(content);
-//        usersday.setCreateTime(time);
 
         String string = Function.listToString(images);
         usersday.setImageData(string);
         if (usersday != null) {
-
             usersDayDao.updateDiary(usersday);
             return true;
         }

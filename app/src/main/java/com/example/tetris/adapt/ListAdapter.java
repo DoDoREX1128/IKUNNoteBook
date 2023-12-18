@@ -1,6 +1,5 @@
 package com.example.tetris.adapt;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -25,13 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListAdapter extends BaseAdapter {
-    private Context context;
-    private ArrayList<ListItem> itemList;
-    private String username;
-    private DataBase db;
-    private UsersListDao usersListDao;
+    private Context context; // 上下文对象
+    private ArrayList<ListItem> itemList; // 列表项列表
+    private String username; // 用户名
+    private DataBase db; // 数据库对象
+    private UsersListDao usersListDao; // UsersList表的数据访问对象
 
-    
     public ListAdapter(Context context, ArrayList<ListItem> itemList) {
         this.context = context;
         this.itemList = itemList;
@@ -58,15 +56,13 @@ public class ListAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.list_list_item, parent, false);
         }
 
-        //数据库初始化
+        // 数据库初始化
         db = Room.databaseBuilder(context, DataBase.class, "mydb")
-//                       .fallbackToDestructiveMigration()
                 .allowMainThreadQueries()
                 .build();
         usersListDao = db.usersListDao();
-        
-        // 获取列表项中的各个视图
 
+        // 获取列表项中的各个视图
         TextView descriptionTextView = convertView.findViewById(R.id.item_description);
         TextView dateTextView = convertView.findViewById(R.id.item_date);
         ImageButton button1 = convertView.findViewById(R.id.button1);
@@ -76,17 +72,17 @@ public class ListAdapter extends BaseAdapter {
         ListItem currentItem = itemList.get(position);
 
         // 设置视图中的数据
-        String str= currentItem.getDescription();
-        if (str!=null) {
+        String str = currentItem.getDescription();
+        if (str!= null) {
             descriptionTextView.setText(str.substring(0, Math.min(str.length(), 10)));
-        }
-        else {
-            str="随便写点什么吧";
+        } else {
+            str = "随便写点什么吧";
             descriptionTextView.setText(str.substring(0, Math.min(str.length(), 10)));
         }
         dateTextView.setText(currentItem.getDate());
 
-        username=itemList.get(0).getUsername();
+        username = itemList.get(0).getUsername();
+
         // 设置按钮的点击事件
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,20 +97,24 @@ public class ListAdapter extends BaseAdapter {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UsersList usersList=usersListDao.getDiaryByUsernameAndTime(currentItem.getUsername(),currentItem.getDate());
+                // 从数据库中删除当前项目
+                UsersList usersList = usersListDao.getDiaryByUsernameAndTime(currentItem.getUsername(), currentItem.getDate());
                 usersListDao.deleteList(usersList);
-                ArrayList<ListItem>ListItems=new ArrayList<>();
+
+                // 更新列表数据
+                ArrayList<ListItem> listItems = new ArrayList<>();
                 List<UsersList> usersLists = usersListDao.getAllDiariesForUser(currentItem.getUsername());
-                for (UsersList usl:usersLists
-                ) {
-                    ListItems.add(new ListItem(usl.getContent(),usl.getCreateTime(),usl.getUsername()));
+                for (UsersList usl : usersLists) {
+                    listItems.add(new ListItem(usl.getContent(), usl.getCreateTime(), usl.getUsername()));
                 }
-                updateData(ListItems);
+                updateData(listItems);
             }
         });
 
         return convertView;
     }
+
+    // 更新列表数据
     public void updateData(ArrayList<ListItem> updatedItemList) {
         itemList.clear();
         itemList.addAll(updatedItemList);
