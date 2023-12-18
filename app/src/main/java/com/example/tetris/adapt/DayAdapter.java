@@ -60,6 +60,7 @@ public class DayAdapter extends BaseAdapter {
 
         // 数据库初始化
         db = Room.databaseBuilder(context, DataBase.class, "mydb")
+//                       .fallbackToDestructiveMigration()
                 .allowMainThreadQueries()
                 .build();
         usersDayDao = db.usersDayDao();
@@ -94,14 +95,14 @@ public class DayAdapter extends BaseAdapter {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 根据用户名和日期获取用户日记
+                // 通过用户名和日期从数据库中获取用户日记
                 UsersDay usersDay = usersDayDao.getDiaryByUsernameAndTime(currentItem.getUsername(), currentItem.getDate());
                 // 删除用户日记
                 usersDayDao.deleteDiary(usersDay);
                 ArrayList<DayItem> dayItems = new ArrayList<>();
-                // 获取日期
+                // 获取日期的前10个字符
                 String date = currentItem.getDate().substring(0, Math.min(str.length(), 10));
-                // 根据用户名和日期获取用户日记列表
+                // 通过用户名和日期从数据库中获取用户日记列表
                 List<UsersDay> usersDays = usersDayDao.getDiariesForSelectedDate(currentItem.getUsername(), date);
                 for (UsersDay usd : usersDays) {
                     dayItems.add(new DayItem(usd.getTitle(), usd.getContent(), usd.getCreateTime(), usd.getUsername()));
@@ -118,6 +119,7 @@ public class DayAdapter extends BaseAdapter {
     public void updateData(ArrayList<DayItem> updatedItemList) {
         itemList.clear();
         itemList.addAll(updatedItemList);
+        Log.d("flag", "updateData: " + itemList);
         notifyDataSetChanged();
     }
 }
