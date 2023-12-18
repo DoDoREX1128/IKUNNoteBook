@@ -1,6 +1,5 @@
 package com.example.tetris.adapt;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -25,13 +24,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
-这段代码定义了一个自定义的适配器类`DayAdapter`，它可以用于在Android应用程序中显示一个列表的项目列表。
-`DayAdapter`类包含一个`getView()`方法，用于为每个列表项创建一个视图。
-该方法从可循环使用的视图中检索标题、描述、日期和两个按钮的视图，
-或者如果没有可循环使用的视图可用，则创建一个新视图。它还设置了两个按钮的点击监听器，
-用于编辑和删除列表项。`updateData()`方法用于更新适配器中的数据。
-*/
 public class DayAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<DayItem> itemList;
@@ -39,7 +31,7 @@ public class DayAdapter extends BaseAdapter {
     private DataBase db;
     private UsersDayDao usersDayDao;
 
-
+    // 构造函数，接收上下文和数据列表
     public DayAdapter(Context context, ArrayList<DayItem> itemList) {
         this.context = context;
         this.itemList = itemList;
@@ -66,13 +58,11 @@ public class DayAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.list_item_layout, parent, false);
         }
 
-        //数据库初始化
+        // 数据库初始化
         db = Room.databaseBuilder(context, DataBase.class, "mydb")
-//                       .fallbackToDestructiveMigration()
                 .allowMainThreadQueries()
                 .build();
         usersDayDao = db.usersDayDao();
-
 
         // 获取列表项中的各个视图
         TextView titleTextView = convertView.findViewById(R.id.item_title);
@@ -86,10 +76,9 @@ public class DayAdapter extends BaseAdapter {
 
         // 设置视图中的数据
         titleTextView.setText(currentItem.getTitle());
-        String str=currentItem.getDescription().toString();
+        String str = currentItem.getDescription().toString();
         descriptionTextView.setText(str.substring(0, Math.min(str.length(), 10)));
         dateTextView.setText(currentItem.getDate());
-
 
         // 设置按钮的点击事件
         button1.setOnClickListener(new View.OnClickListener() {
@@ -105,29 +94,30 @@ public class DayAdapter extends BaseAdapter {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UsersDay usersDay=usersDayDao.getDiaryByUsernameAndTime(currentItem.getUsername(),currentItem.getDate());
+                // 根据用户名和日期获取用户日记
+                UsersDay usersDay = usersDayDao.getDiaryByUsernameAndTime(currentItem.getUsername(), currentItem.getDate());
+                // 删除用户日记
                 usersDayDao.deleteDiary(usersDay);
-                ArrayList<DayItem>dayItems=new ArrayList<>();
-//                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Log.d("flag", "onClick: "+currentItem.getDate());
-                String date= currentItem.getDate().substring(0, Math.min(str.length(), 10));
-                Log.d("flag", "onClick: "+date);
+                ArrayList<DayItem> dayItems = new ArrayList<>();
+                // 获取日期
+                String date = currentItem.getDate().substring(0, Math.min(str.length(), 10));
+                // 根据用户名和日期获取用户日记列表
                 List<UsersDay> usersDays = usersDayDao.getDiariesForSelectedDate(currentItem.getUsername(), date);
-                for (UsersDay usd:usersDays
-                ) {
-                    dayItems.add(new DayItem(usd.getTitle(),usd.getContent(),usd.getCreateTime(),usd.getUsername()));
+                for (UsersDay usd : usersDays) {
+                    dayItems.add(new DayItem(usd.getTitle(), usd.getContent(), usd.getCreateTime(), usd.getUsername()));
                 }
+                // 更新数据
                 updateData(dayItems);
             }
         });
 
         return convertView;
     }
+
+    // 更新数据
     public void updateData(ArrayList<DayItem> updatedItemList) {
         itemList.clear();
         itemList.addAll(updatedItemList);
-        Log.d("flag", "updateData: "+itemList);
         notifyDataSetChanged();
     }
-
 }
